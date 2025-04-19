@@ -287,7 +287,7 @@ Auto: OnPlay
 Text Auto: [Discard 1 <Music> character] When this is placed on stage from hand, you may pay cost. If you do, search your deck for up to 1 {Unknown Sumika 1} or {Unknown Sumika 2}, show it to your opponent, add it to hand, and shuffle your deck afterwards.
 Auto: StartClimaxPhase
 {
-	PayCost UnknownSumika2
+	PayCost Resonate UnknownSumika2
 	{
 		GainPower 4000
 	}
