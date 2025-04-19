@@ -1,0 +1,4 @@
+Series: Gakuen Idolmaster
+Folder: Gakumas/W124
+Prefix: GIM/W124
+SetName: Gakuen Idolmaster (W124)

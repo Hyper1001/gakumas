@@ -1,0 +1,331 @@
+Character: GIM/W124-002
+Name Yellow Big Bang!, Kotone Fujita
+Color Y
+Level 0
+Cost 0
+Power 1500
+Soul 1
+Trait1 Music
+Trait2 Wagie
+Auto: OnPlay
+{
+    PayCost 1 Clock
+    {
+        SearchDeck Compare ThatCardsLevel 1 OrLess && IsCharacter
+    }
+}
+Text Auto: [(1) Put the top card of your deck in your clock] When this card is placed on the stage from your hand, you may pay the cost. If you do, search your deck for up to 1 level 1 or lower character, reveal it, put it in your hand, and shuffle your deck.
+Auto: OnEndOfAttack|OnReversed
+{
+    If LocationContainsOrLess Memory 1 Any
+    {
+        Question Put this card into memory?
+        If Yes
+        {
+            MoveCard Memory
+        }
+    }
+}
+Text Auto: At the end of this card's attack or when this card becomes reverse in battle, if there is 1 or less card in your memory, you may put this card into memory.
+EndCard
+
+Character: GIM/W124-023
+Name Sports Outfit Thing, Sumika Shiun (RETRANSLATE)
+Color Y
+Level 0
+Cost 0
+Power 1500
+Soul 1
+Trait1 Music
+Trait2 Wagie
+Auto: OnPlay|OnAttack
+{
+	TargetLocation Stage
+	NarrowTargets HasTrait Music
+	AIChoice GainPower 1500
+	ChooseCharacterFromTargets Choose a character to give +1500 power.
+	GainPower 1500
+}
+Text Auto: When this card is placed on the stage from your hand or attacks, choose 1 of your <Music> characters, it gets +1500 power until end of turn.
+EndCard
+
+Character: GIM/W124-035
+Name Mao
+Color R
+Level 1
+Cost 0
+Power 2500
+Soul 1
+Trait1 Music
+Trait2 ???
+Cont: GiveSelf
+{
+  If StageContains 2 Other && HasTrait Music
+  {
+    GainPower 4000
+    GainEffect
+		{
+			*GainPowerWhenAttackingLevel2(6000)
+		}
+  }
+}
+Text Cont: If you have 2 or more other <Music> character, this gets +4000 power and the following ability, "AUTO - When this attacks, if the Level of the character across from this is 2, this turn, this gets +6000 power."
+Auto: Encore SendFromWaitingRoomToBottom 1 Clock HasTrait Music
+{
+}
+Text Auto: ENCORE [Put 1 <Music> character from your waiting room at the bottom of your clock]
+EndCard
+
+Character: GIM/W124-036
+Name Boom Boom Pow!, Saki Hanami
+Color R
+Level 1
+Cost 0
+Power 4000
+Soul 1
+Trait1 Music
+Trait2 Game
+Combo Leave it to your big sister!
+Auto: OnPlay
+{
+  GainPower 3000
+}
+Text Auto: When this is placed on stage from hand, this turn, this gets +3000 power.
+Auto: OnReverseOpponent
+{
+  If Climax Leave it to your big sister!
+  {
+    TargetTop Deck 1
+    Reveal
+    SetXValue TargetCardsLevel
+    SearchWaitingRoom Compare ThatCardsLevel X OrLower && IsCharacter
+    IfTarget IsCharacter
+    {
+      Question Put the revealed card into your stock?
+      If Yes
+      {
+        MoveCard Stock
+      }
+      Else
+      {
+        EndPeek
+      }
+    }
+  }
+}
+Text Auto: CxCombo When this card's battle opponent is Reversed, if you have the Door CX in your CX Area, reveal the top card of your deck, then choose 1 Level X or lower character from your Waiting Room, and add it to hand, if that card is a <Music> character, send it to Stock. X equals the Level of the revealed card.
+EndCard
+
+Character: GIM/W124-050
+Name School Life, Misuzu Hataya
+Color R
+Level 1
+Cost 0
+Power 4000
+Soul 1
+Trait1 Music
+Trait2 My Own Pace
+Auto: OnOpponentReverse
+{
+  PayCost 1
+  {
+    TargetLocation OpponentStage
+    ChooseCharacterFromTargets
+    Bounce
+  }
+}
+Text Auto: [(1)] When this card's battle opponent is Reversed, you may pay cost. If you do, choose 1 of your opponent's characters, return it to hand.
+*RedLevel1Bomb
+EndCard
+
+Character: GIM/W124-055
+Name I Met You, and You Made my Dreams Come True, Rinami Himesaki (RETRANSLATE)
+Color R
+Level 0
+Cost 0
+Power 2000
+Soul 1
+Trait1 Music
+Trait2 ???
+Auto: OnPlay
+{
+  Question Do you want to mill 3?
+  If Yes
+  {
+    Mill 3
+  }
+}
+Act: Discard 1 Any SendSelf WaitingRoom
+{
+	TargetLocation OpponentStage
+	AIChoice Move
+	ChooseCharacterFromTargets Choose a character to move.
+	MoveToOpenPosition True True
+}
+Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 of your opponent's characters, and move it to another open position of their stage.
+EndCard
+
+Character: GIM/W124-052
+Name ????????, China Kuramoto
+Color R
+Level 0
+Cost 0
+Power 500
+Soul 1
+Trait1 Music
+Trait2 ???
+Auto: StartDrawPhase
+{
+  If Compare TurnNumber 2 OrLess
+  {
+    Question Do you want to mill 3? (3 is assumed for now)
+    If Yes
+    {
+      Mill 3
+    }
+  }
+}
+InWaitingRoom
+Text Auto: While this is in your Waiting Room, at the start of your First Turn, you may mill ???.
+Auto: OnReversed
+{
+  TargetLocation WaitingRoom
+  NarrowTargets NameEquals ????????, China Kuramoto
+  SetXValue TargetCount
+  TargetBattleOpponent
+  If Compare TargetCardsLevel X OrLess
+	{
+		Question Reverse the battle opponent?
+		If Yes
+		{
+			Reverse
+		}
+	}
+}
+Text Auto: When this is Reversed, if the battle opponent's Level is X or lower, you may Reverse that character. X is equal to the number of ????????, China Kuramoto in your Waiting Room.
+EndCard
+
+Character: GIM/W124-059
+Name Flawless Planning, Sena Juo
+Color R
+Level 0
+Cost 0
+Power 500
+Soul 1
+Trait1 Music
+Trait2 ???
+Auto: OnUseThisCardsBackup
+{
+  If Compare Experience 6 OrMore
+  {
+    SearchWaitingRoomForTarget HasTrait Music
+    Question Put this on top of your stock? (If no, character is sent to bottom of stock)
+    If Yes
+    {
+      MoveCard Stock
+    }
+    Else
+    {
+      MoveCard BottomOfStock
+    }
+  }
+}
+Text Auto: When you use this card's BACKUP, if the sum of Levels of cards in your Level Zone is 2 or more, choose 1 <Music> character in your Waiting Room, you may send it to the top or bottom of your Stock.
+Backup 2000
+EndCard
+
+Character: GIM/W124-071
+Name IVY, Temari Tsukimura
+Color B
+Level 3
+Cost 2
+Trigger Soul
+Power 10000
+Soul 2
+Trait1 Music
+Trait2 Song
+Combo What are you doing?
+*Healer
+Auto: OnAttack
+{
+  If Climax What are you doing? && StageContains 2 Other && HasTrait Music
+  {
+    TargetLocation Memory
+    SetXValue TargetCount
+    Question Burn 1?
+    If Yes
+    {
+        Burn 1
+    }
+    MillOpponentBottom X
+    NarrowTargets IsClimax
+    If HasTarget
+    {
+      Burn 1
+    }
+  }
+}
+Text Auto: CxCombo When this attacks, if you have the "What are you doing?" in your CX Area, and you have 2 or more other <Music> characters, you may deal 1 damage to your opponent, then perform the following ability, "You may send the bottom X cards of your opponent's deck to Waiting Room. If there is a CX among them, deal 1 damage to your opponent. X equals the number of <Music> characters in your Memory -1."
+EndCard
+
+Character: GIM/W124-082
+Name Swimsuit, Lilja Katsuragi (RETRANSLATE)
+Color B
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 Sweets
+Auto: OnPlay
+{
+  PayCost Discard 1 HasTrait Music
+  {
+    SearchDeck NameEquals UnknownSumika1 || UnknownSumika2
+  }
+}
+Text Auto: [Discard 1 <Music> character] When this is placed on stage from hand, you may pay cost. If you do, search your deck for up to 1 {Unknown Sumika 1} or {Unknown Sumika 2}, show it to your opponent, add it to hand, and shuffle your deck afterwards.
+Auto: StartClimaxPhase
+{
+	PayCost UnknownSumika2
+	{
+		GainPower 4000
+	}
+}
+Text Auto: RESONATE [Reveal {Unknown Sumika 2} from your hand] At the start of your CX Phase, you may pay cost. If you do, this turn, this gets +4000 power.
+EndCard
+
+Character: GIM/W124-084
+Name Healer, Hiiro
+Color B
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 Genius
+Auto: StartMainPhase
+{
+	If Compare MyLevel 1 OrMore
+  {
+    Mill 1
+    IfTarget Compare ThatCardsLevel 0 OrLess && IsCharacter || NameEquals UnknownEvent
+    {
+      TargetSelf
+      MoveCardToBottom Deck
+    }
+  }
+}
+Alarm
+Text Auto: ALARM If this is on top of your Clock, if you are Level 1 or higher, at the start of your Main Phase, mill 1. If that card is a {Unknown Event} or a Level 0 or lower character, send this to the bottom of your deck.
+EndCard
+
+Climax: GIM/W124-101
+Name Leave it to your big sister!
+*DoorClimax
+EndCard
+
+Climax: GIM/W124-102
+Name What are you doing?
+*GateClimax
+EndCard
