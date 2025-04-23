@@ -29,6 +29,59 @@ Auto: OnEndOfAttack|OnReversed
 Text Auto: At the end of this card's attack or when this card becomes reverse in battle, if there is 1 or less card in your memory, you may put this card into memory.
 EndCard
 
+Character: GIM/W124-012
+Name Tame-Lie-One-Step, Sumika Shiun
+Color Y
+Level 3
+Cost 2
+Trigger Soul
+Power 10000
+Soul 2
+Trait1 Music
+Trait2 Gal
+Combo SumikaCX
+Auto: OnPlay|PlacedBy Spawner Lilja
+{
+    *OptionalHeal
+}
+Text Auto: When this is placed on stage from hand or by the AUTO effect of "Spawner Lilja", you may heal 1.
+Auto: OnAttack
+{
+  If Climax SumikaCX && StageContains 2 Other && HasTrait Music
+  {
+    PayCost 2 Discard 1 Any
+    {
+      Burn 2
+      MillOpponentBottom 1
+      IfTarget IsCharacter && ThatCardsLevel 2 OrLess || IsEvent
+    	{
+        Burn 1
+    	}
+    }
+  }
+}
+Text Auto: [(2) Discard 1 card] When this attacks, if you have "SumikaCX" in your CX Area, and you have 2 or more other <Music> characters, you may pay cost. If you do, deal 2 damage to your opponent, then send the bottom card of your opponent's deck to Waiting Room. If that card is an Event or a Level 2 or lower character, deal 1 damage to your opponent.
+EndCard
+
+Character: GIM/W124-023
+Name CX Swap Kotone
+Color Y
+Level 0
+Cost 0
+Power 500
+Soul 1
+Trait1 Music
+Trait2 Wagie
+Auto: OnPlay
+{
+	PayCost Discard 1 HasTrigger Choice && IsClimax
+	{
+		SearchWaitingRoom IsClimax && HasTrigger Choice
+	}
+}
+Text Auto: [Discard 1 Climax with a Choice trigger icon] When this card is placed on the stage from your hand, you may pay the cost. If you do, choose 1 Climax with a Choice trigger icon in your waiting room, and return it to your hand.
+EndCard
+
 Character: GIM/W124-023
 Name Sports Outfit Thing, Sumika Shiun (RETRANSLATE)
 Color Y
@@ -37,7 +90,7 @@ Cost 0
 Power 1500
 Soul 1
 Trait1 Music
-Trait2 Wagie
+Trait2 Gal
 Auto: OnPlay|OnAttack
 {
 	TargetLocation Stage
@@ -84,7 +137,7 @@ Cost 0
 Power 4000
 Soul 1
 Trait1 Music
-Trait2 Game
+Trait2 Competition
 Combo Leave it to your big sister!
 Auto: OnPlay
 {
@@ -114,6 +167,32 @@ Auto: OnReverseOpponent
   }
 }
 Text Auto: CxCombo When this card's battle opponent is Reversed, if you have the Door CX in your CX Area, reveal the top card of your deck, then choose 1 Level X or lower character from your Waiting Room, and add it to hand, if that card is a <Music> character, send it to Stock. X equals the Level of the revealed card.
+EndCard
+
+Character: GIM/W124-045
+Name Saki Helmet
+Color R
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 Competition
+Auto: OnPlay
+{
+  GainPower 1500
+}
+Text Auto: When this is placed on stage from hand, this turn, this gets +1500 power.
+Act: Discard 1 Any SendSelf WaitingRoom
+{
+	SearchWaitingRoom IsCharacter && NameContains Saki|Temari|Kotone
+  If LocationContainsOrLess Memory 5 Any
+  {
+    SearchLocationForTargets WaitingRoom 0 1 NameEquals Saki Helmet
+    MoveCard Memory
+  }
+}
+Text Act: ACT - [Discard 1 card, Send this to Waiting Room] Choose 1 character with "Saki", "Temari" or "Kotone" in its name in your Waiting Room, add it to hand, then if you have 5 or less Memory, choose up to 1 "Saki Helmet" in your Waiting Room, send it to Memory.
 EndCard
 
 Character: GIM/W124-050
@@ -234,6 +313,11 @@ Text Auto: When you use this card's BACKUP, if the sum of Levels of cards in you
 Backup 2000
 EndCard
 
+Climax: GIM/W124-064
+Name Leave it to your big sister!
+*DoorClimax
+EndCard
+
 Character: GIM/W124-071
 Name IVY, Temari Tsukimura
 Color B
@@ -268,6 +352,44 @@ Auto: OnAttack
 Text Auto: CxCombo When this attacks, if you have the "What are you doing?" in your CX Area, and you have 2 or more other <Music> characters, you may deal 1 damage to your opponent, then perform the following ability, "You may send the bottom X cards of your opponent's deck to Waiting Room. If there is a CX among them, deal 1 damage to your opponent. X equals the number of <Music> characters in your Memory -1."
 EndCard
 
+Character: GIM/W124-079
+Name Spawner Lilja
+Color B
+Level 3
+Cost 2
+Trigger Soul
+Power 9500
+Soul 2
+Trait1 Music
+Trait2 Sweets
+Auto: OnReverseOpponent
+{
+  TargetBattleOpponent
+  IfTarget OnStage
+  {
+    MultipleChoiceQuestion Choose one of the following. \n1. Send Battle Opponent to top of deck.\n2.Send Battle Opponent to bottom of deck.\n3.Do nothing.
+    If Answer 0
+    {
+      MoveCard OpponentDeck
+    }
+    If Answer 1
+    {
+      MoveCard BottomOfOpponentDeck
+    }
+  }
+}
+Text Auto: When this card's battle opponent is Reversed, if you have 3 or more other <Music> characters, you may send that character to the top or bottom of your opponent's deck.
+Auto: OnPlay
+{
+  PayCost Resonate Tame-Lie-One-Step, Sumika Shiun
+  {
+      SearchLocationForTargets WaitingRoom 0 1 NameEquals Resonate Tame-Lie-One-Step, Sumika Shiun
+      PlaceOnStage false true true false
+  }
+}
+Text Auto: RESONATE [Reveal "Tame-Lie-One-Step, Sumika Shiun" from your hand] When this is placed on stage from hand, if you have another <Music> character, you may pay cost. If you do, choose 1 "Tame-Lie-One-Step, Sumika Shiun" in your Waiting Room, place it on stage in any slot.
+EndCard
+
 Character: GIM/W124-082
 Name Swimsuit, Lilja Katsuragi (RETRANSLATE)
 Color B
@@ -281,22 +403,89 @@ Auto: OnPlay
 {
   PayCost Discard 1 HasTrait Music
   {
-    SearchDeck NameEquals UnknownSumika1 || UnknownSumika2
+    SearchDeck NameEquals Tame-Lie-One-Step, Sumika Shiun || UnknownSumika
   }
 }
-Text Auto: [Discard 1 <Music> character] When this is placed on stage from hand, you may pay cost. If you do, search your deck for up to 1 {Unknown Sumika 1} or {Unknown Sumika 2}, show it to your opponent, add it to hand, and shuffle your deck afterwards.
+Text Auto: [Discard 1 <Music> character] When this is placed on stage from hand, you may pay cost. If you do, search your deck for up to 1 "Tame-Lie-One-Step, Sumika Shiun" or {Unknown Sumika}, show it to your opponent, add it to hand, and shuffle your deck afterwards.
 Auto: StartClimaxPhase
 {
-	PayCost Resonate UnknownSumika2
+	PayCost Resonate Tame-Lie-One-Step, Sumika Shiun
 	{
 		GainPower 4000
 	}
 }
-Text Auto: RESONATE [Reveal {Unknown Sumika 2} from your hand] At the start of your CX Phase, you may pay cost. If you do, this turn, this gets +4000 power.
+Text Auto: RESONATE [Reveal "Resonate Tame-Lie-One-Step, Sumika Shiun" from your hand] At the start of your CX Phase, you may pay cost. If you do, this turn, this gets +4000 power.
 EndCard
 
 Character: GIM/W124-084
-Name Healer, Hiiro
+Name OnAtttackResonate Lilja
+Color B
+Level 1
+Cost 0
+Power 4000
+Soul 1
+Trait1 Music
+Trait2 Sweets
+Auto: OnOtherCharacterAttacks
+{
+	GainPower 1000
+}
+Quick
+Text Auto: When your other <Music> character attacks, this turn, this gets +1000 power.
+Auto: OnAttack
+{
+  PayCost 1 Resonate Tame-Lie-One-Step, Sumika Shiun
+  {
+    SearchWaitingRoom IsCharacter && HasTrait Music
+  }
+}
+Text Auto: RESONATE [(1) Reveal "Tame-Lie-One-Step, Sumika Shiun" from your hand] When this attacks, you may pay cost. If you do, choose 1 <Music> character in your Waiting Room, add it to hand.
+EndCard
+
+Character: GIM/W124-088
+Name Memory Temari
+Color B
+Level 0
+Cost 0
+Power 500
+Soul 1
+Trait1 Music
+Trait2 Song
+Auto: OnAttack
+{
+  TargetLocation Stage
+  NarrowTargets HasTrait Music && Other
+  ChooseCharacterFromTargets
+  GainPower 1000
+}
+Text Auto: When this attacks, choose 1 of your other <Music> characters, this turn, it gets +1000 power.
+Auto: OnReversed
+{
+	If OpponentsTurn && InLocation Stage
+	{
+		PayCost 1
+		{
+			Rest
+			ScheduleEffect StartMyEncorePhase
+			{
+				Effect:
+				{
+					TargetSelf
+					If InLocation Stage
+					{
+						MoveCard Memory
+					}
+
+				}
+			}
+		}
+	}
+}
+Text Auto: [(1)] During your opponent's turn, when this card becomes reversed in battle, you may pay the cost. If you do, Rest this card, and at the beginning of your next encore step, put this card into your memory.
+EndCard
+
+Character: GIM/W124-090
+Name Healer, Hiro
 Color B
 Level 0
 Cost 0
@@ -320,12 +509,33 @@ Alarm
 Text Auto: ALARM If this is on top of your Clock, if you are Level 1 or higher, at the start of your Main Phase, mill 1. If that card is a {Unknown Event} or a Level 0 or lower character, send this to the bottom of your deck.
 EndCard
 
-Climax: GIM/W124-101
-Name Leave it to your big sister!
-*DoorClimax
+Character: GIM/W124-093
+Name Brainstorm Sumika
+Color B
+Level 1
+Cost 0
+Power 4000
+Soul 1
+Trait1 Music
+Trait2 Gal
+Auto: OnAttack
+{
+  *Scry
+  GainPower 2000
+}
+Text Auto: When this attacks, if you have another <Music> character, look at the top card of your deck, and put it on top of your deck or into your Waiting Room, and this turn, this gets +2000 power.
+Act: 1 Rest 2 Any
+{
+	Brainstorm 5
+	PerClimax
+	{
+		SearchWaitingRoom IsCharacter && HasTrait Music
+	}
+}
+Text Act: [(1) Rest 2 of your characters] Flip over the top 4 cards of your deck, then send them to Waiting Room. For each CX among them, choose up to 1 character from your Waiting Room, and add it to hand.
 EndCard
 
-Climax: GIM/W124-102
+Climax: GIM/W124-098
 Name What are you doing?
 *GateClimax
 EndCard
