@@ -102,6 +102,11 @@ Auto: OnPlay|OnAttack
 Text Auto: When this card is placed on the stage from your hand or attacks, choose 1 of your <Music> characters, it gets +1500 power until end of turn.
 EndCard
 
+Climax: GIM/W124-033
+Name SumikaCX
+*ChoiceClimax
+EndCard
+
 Character: GIM/W124-035
 Name Mao
 Color R
