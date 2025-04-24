@@ -109,12 +109,12 @@ Auto: OnAttack
   If Climax ChinaCX
   {
     GainPower 4000
-    TargetTop
-    RevealTargets
-    IfTarget IsCharacter && Compare ThatCardsLevel 0 OrLess
-		{
-			Burn 2
-		}
+    TargetTop Deck 1
+    Reveal
+    If Compare TargetCardsLevel 0 OrLower && IsCharacter
+    {
+      Burn 2
+    }
   }
 }
 Text Auto: CxCombo When this attacks, if you have the Choice CX in your CX Area, this turn, this gets +4000 power, then reveal the top card of your deck. If that card is a "OK, Altogether Now♪" or a Level 0 or lower character, deal 2 damage to your opponent.
