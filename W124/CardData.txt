@@ -29,6 +29,108 @@ Auto: OnEndOfAttack|OnReversed
 Text Auto: At the end of this card's attack or when this card becomes reverse in battle, if there is 1 or less card in your memory, you may put this card into memory.
 EndCard
 
+Character: GIM/W124-003
+Name Happy Millefeuille, Sena Juo
+Color Y
+Level 2
+Cost 1
+Trigger Soul
+Power 10000
+Soul 1
+Trait1 Music
+Trait2 Student Council President
+Combo SenaCX
+Cont: GiveSelf
+{
+  If StageContains 2 HasTrait Music && Other
+  {
+    GainPower 5000
+  }
+}
+Text Cont: If you have 2 or more other <Music> characters, this gets +5000 power.
+Auto: OnPlay
+{
+  If Compare CardsInDeck 6 OrLess
+  {
+    Question Refresh?
+    If Yes
+    {
+      Refresh
+    }
+  }
+}
+Text Auto: When this is placed on stage from hand, If you have 6 or less cards in your deck, you may shuffle all cards from your Waiting Room into your deck.
+Auto: StartMyEncorePhase
+{
+  If Climax SenaCX && InLocation CenterStage && StageContains 2 HasTrait Music && Other
+  {
+    SearchLocationForTargets Deck 0 2 IsCharacter && HasTrait Music
+    RevealTargets
+    SaveTargets
+    Message Choose a card to put into hand.
+    ChooseCardsFromTargets 1 1 Any
+    RevealTargets
+    MoveCard Hand
+    RemoveCurrentFromSavedTargets
+    LoadTargets
+    MoveCard WaitingRoom
+    ShuffleLocation Deck
+    UntilEndOfOpponentsTurn
+    GainPower 1000
+  }
+}
+Text Auto: CxCombo At the start of your Encore Step, if you have "SenaCX" in your CX Area, and this is in your front row, and you have 2 or more other <Music> characters, search your deck for up to 2 <Music> characters, show them to your opponent, add up to 1 to hand, send the rest to Waiting Room, and shuffle your deck afterwards, and until the end of your opponent's next turn, this gets +1000 power.
+EndCard
+
+Character: GIM/W124-004
+Name Hibi, Hakkenteki Step!, China Kuramoto
+Color Y
+Level 3
+Cost 2
+Trigger Soul
+Power 10000
+Soul 2
+Trait1 Music
+Trait2 Young Lady
+Combo ChinaCX
+Cont: InHand
+{
+  TargetLocation WaitingRoom
+  NarrowTargets IsCharacter && Compare ThatCardsLevel 1 OrLess
+  SetXValue TargetCount
+  If Compare X 5 OrLess
+  {
+      LoseLevel 1
+  }
+}
+Text Cont: If you have 5 or less Level 1 or lower characters in your Waiting Room, this gets -1 Level in hand.
+Auto: OnAttack
+{
+  If Climax ChinaCX
+  {
+    GainPower 4000
+    TargetTop
+    RevealTargets
+    IfTarget IsCharacter && Compare ThatCardsLevel 0 OrLess
+		{
+			Burn 2
+		}
+  }
+}
+Text Auto: CxCombo When this attacks, if you have the Choice CX in your CX Area, this turn, this gets +4000 power, then reveal the top card of your deck. If that card is a "OK, Altogether Now♪" or a Level 0 or lower character, deal 2 damage to your opponent.
+Auto: OnSentFromStageToWaitingRoom
+{
+  Question Return this to hand?
+  If Yes
+  {
+    SearchWaitingRoom NameEquals Hibi, Hakkenteki Step!, China Kuramoto
+    SearchWaitingRoomForTarget HasTrait Music
+    MoveCard Stock
+  }
+}
+Text Auto:
+EndCard
+
 Character: GIM/W124-012
 Name Tame-Lie-One-Step, Sumika Shiun
 Color Y
@@ -63,7 +165,28 @@ Auto: OnAttack
 Text Auto: [(2) Discard 1 card] When this attacks, if you have "SumikaCX" in your CX Area, and you have 2 or more other <Music> characters, you may pay cost. If you do, deal 2 damage to your opponent, then send the bottom card of your opponent's deck to Waiting Room. If that card is an Event or a Level 2 or lower character, deal 1 damage to your opponent.
 EndCard
 
-Character: GIM/W124-023
+Character: GIM/W124-016
+Name CenterRunner
+Color Y
+Level 0
+Cost 0
+Power 1500
+Soul 1
+Trait1 Music
+Trait2 Sports
+Cont: GiveSelf
+{
+  If Not StageContains 1 Not HasTrait Music
+  {
+    GainPower 1500
+    GainLevel 1
+  }
+}
+Text Cont: If all of your characters are <Music>, this gets +1 level and +1500 power.
+*RunToCenter
+EndCard
+
+Character: GIM/W124-022
 Name CX Swap Kotone
 Color Y
 Level 0
@@ -102,6 +225,27 @@ Auto: OnPlay|OnAttack
 Text Auto: When this card is placed on the stage from your hand or attacks, choose 1 of your <Music> characters, it gets +1500 power until end of turn.
 EndCard
 
+Event: GIM/W124-029
+Name ChinaEvent
+Color Y
+Level 2
+Cost 1
+Effect:
+{
+}
+Text Not Functional
+EndCard
+
+Climax: GIM/W124-030
+Name SenaCX
+*ChoiceClimax
+EndCard
+
+Climax: GIM/W124-031
+Name ChinaCX
+*ChoiceClimax
+EndCard
+
 Climax: GIM/W124-033
 Name SumikaCX
 *ChoiceClimax
@@ -115,7 +259,7 @@ Cost 0
 Power 2500
 Soul 1
 Trait1 Music
-Trait2 ???
+Trait2 Opera
 Cont: GiveSelf
 {
   If StageContains 2 Other && HasTrait Music
@@ -174,6 +318,20 @@ Auto: OnReverseOpponent
 Text Auto: CxCombo When this card's battle opponent is Reversed, if you have the Door CX in your CX Area, reveal the top card of your deck, then choose 1 Level X or lower character from your Waiting Room, and add it to hand, if that card is a <Music> character, send it to Stock. X equals the Level of the revealed card.
 EndCard
 
+Character: GIM/W124-036
+Name Boom Boom Pow!, Saki Hanami
+Color R
+Level 2
+Cost 2
+Trigger Soul
+Power 2000
+Soul 2
+Trait1 Music
+Trait2 Cooking
+Combo RinamiCX
+Text Auto: Not Functional
+EndCard
+
 Character: GIM/W124-045
 Name Saki Helmet
 Color R
@@ -222,34 +380,7 @@ Text Auto: [(1)] When this card's battle opponent is Reversed, you may pay cost.
 *RedLevel1Bomb
 EndCard
 
-Character: GIM/W124-055
-Name I Met You, and You Made my Dreams Come True, Rinami Himesaki (RETRANSLATE)
-Color R
-Level 0
-Cost 0
-Power 2000
-Soul 1
-Trait1 Music
-Trait2 ???
-Auto: OnPlay
-{
-  Question Do you want to mill 3?
-  If Yes
-  {
-    Mill 3
-  }
-}
-Act: Discard 1 Any SendSelf WaitingRoom
-{
-	TargetLocation OpponentStage
-	AIChoice Move
-	ChooseCharacterFromTargets Choose a character to move.
-	MoveToOpenPosition True True
-}
-Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 of your opponent's characters, and move it to another open position of their stage.
-EndCard
-
-Character: GIM/W124-052
+Character: GIM/W124-053
 Name ????????, China Kuramoto
 Color R
 Level 0
@@ -257,20 +388,20 @@ Cost 0
 Power 500
 Soul 1
 Trait1 Music
-Trait2 ???
+Trait2 Young Lady
 Auto: StartDrawPhase
 {
   If Compare TurnNumber 2 OrLess
   {
-    Question Do you want to mill 3? (3 is assumed for now)
+    Question Do you want to mill 6?
     If Yes
     {
-      Mill 3
+      Mill 6
     }
   }
 }
 InWaitingRoom
-Text Auto: While this is in your Waiting Room, at the start of your First Turn, you may mill ???.
+Text Auto: While this is in your Waiting Room, at the start of your First Turn, you may mill 6.
 Auto: OnReversed
 {
   TargetLocation WaitingRoom
@@ -289,15 +420,55 @@ Auto: OnReversed
 Text Auto: When this is Reversed, if the battle opponent's Level is X or lower, you may Reverse that character. X is equal to the number of ????????, China Kuramoto in your Waiting Room.
 EndCard
 
-Character: GIM/W124-059
-Name Flawless Planning, Sena Juo
+Character: GIM/W124-055
+Name I Met You, and You Made my Dreams Come True, Rinami Himesaki (RETRANSLATE)
 Color R
 Level 0
 Cost 0
+Power 2000
+Soul 1
+Trait1 Music
+Trait2 Cooking
+Auto: OnPlay
+{
+  Question Do you want to mill 3?
+  If Yes
+  {
+    Mill 3
+  }
+}
+Text Auto: When this is placed on stage from hand, you may mill 3.
+Act: Discard 1 Any SendSelf WaitingRoom
+{
+	TargetLocation OpponentStage
+	AIChoice Move
+	ChooseCharacterFromTargets Choose a character to move.
+	MoveToOpenPosition True True
+}
+Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 of your opponent's characters, and move it to another open position of their stage.
+EndCard
+
+Character: GIM/W124-056
+Name SoulGain Ume
+Color R
+Level 0
+Cost 0
+Power 2500
+Soul 1
+Trait1 Music
+Trait2 Sports
+Text Auto: Not Functional
+EndCard
+
+Character: GIM/W124-059
+Name Flawless Planning, Sena Juo
+Color R
+Level 1
+Cost 1
 Power 500
 Soul 1
 Trait1 Music
-Trait2 ???
+Trait2 Student Council President
 Auto: OnUseThisCardsBackup
 {
   If Compare Experience 6 OrMore
@@ -318,9 +489,46 @@ Text Auto: When you use this card's BACKUP, if the sum of Levels of cards in you
 Backup 2000
 EndCard
 
+Character: GIM/W124-060
+Name BigBody Sena Juo
+Color R
+Level 2
+Cost 1
+Power 10500
+Soul 1
+Trait1 Music
+Trait2 Student Council President
+Text Auto: Not Functional. DO NOT USE.
+EndCard
+
+Event: GIM/W124-063
+Name To the Main Stage of Dreams!
+Color R
+Level 3
+Cost 1
+Effect:
+{
+  SearchWaitingRoom HasTrait Music
+  Question Perform the following effect? "Your opponent chooses 1 CX from their Waiting Room, and shuffles all other cards from their Waiting Room into their deck."
+  If Yes
+  {
+    OpponentSearchLocationForTargets WaitingRoom 1 1 Any
+    ReverseTargets OpponentWaitingRoom
+    MoveCard OpponentDeck
+    ShuffleLocation OpponentDeck
+  }
+}
+Text Choose up to 1 <Music> character in your Waiting Room, add it to hand.\nYou may perform the following effect, "Your opponent chooses 1 CX from their Waiting Room, and shuffles all other cards from their Waiting Room into their deck."
+EndCard
+
 Climax: GIM/W124-064
 Name Leave it to your big sister!
 *DoorClimax
+EndCard
+
+Climax: GIM/W124-066
+Name RinamiCX
+*StandbyClimax
 EndCard
 
 Character: GIM/W124-071
@@ -355,6 +563,19 @@ Auto: OnAttack
   }
 }
 Text Auto: CxCombo When this attacks, if you have the "What are you doing?" in your CX Area, and you have 2 or more other <Music> characters, you may deal 1 damage to your opponent, then perform the following ability, "You may send the bottom X cards of your opponent's deck to Waiting Room. If there is a CX among them, deal 1 damage to your opponent. X equals the number of <Music> characters in your Memory -1."
+EndCard
+
+Character: GIM/W124-074
+Name Combo Hiro
+Color B
+Level 0
+Cost 0
+Power 2000
+Soul 1
+Trait1 Music
+Trait2 Genius
+Combo HiroCX
+Text Auto: Not Functional
 EndCard
 
 Character: GIM/W124-079
@@ -489,6 +710,18 @@ Auto: OnReversed
 Text Auto: [(1)] During your opponent's turn, when this card becomes reversed in battle, you may pay the cost. If you do, Rest this card, and at the beginning of your next encore step, put this card into your memory.
 EndCard
 
+Character: GIM/W124-089
+Name Helmet Misuzu
+Color B
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 My Own Pace
+Text Auto: Not Functional
+EndCard
+
 Character: GIM/W124-090
 Name Healer, Hiro
 Color B
@@ -540,7 +773,55 @@ Act: 1 Rest 2 Any
 Text Act: [(1) Rest 2 of your characters] Flip over the top 4 cards of your deck, then send them to Waiting Room. For each CX among them, choose up to 1 character from your Waiting Room, and add it to hand.
 EndCard
 
+Character: GIM/W124-094
+Name Backup Mao
+Color B
+Level 2
+Cost 1
+Trigger Soul
+Power 2500
+Soul 1
+Trait1 Music
+Trait2 Opera
+Auto: OnUseThisCardsBackup
+{
+
+}
+Text Auto: Not Functional
+Backup 2500
+EndCard
+
 Climax: GIM/W124-098
 Name What are you doing?
 *GateClimax
+EndCard
+
+Climax: GIM/W124-099
+Name HiroCX
+*GateClimax
+EndCard
+
+Character: GIM/W124-P04
+Name StockShuffle Saki
+Color B
+Level 2
+Cost 1
+Trigger Soul
+Power 2500
+Soul 2
+Trait1 Music
+Trait2 Competition
+Auto: OnPlay
+{
+  PayCost 1 Discard 1 Any
+  {
+    TargetLocation OpponentStock
+    SetXValue TargetCount
+    MoveCard OpponentDeck
+    ShuffleLocation OpponentDeck
+    TargetTop OpponentDeck X
+    MoveCard OpponentStock
+  }
+}
+Text Auto: [(1) Discard 1 card] When this is placed on stage from hand, you may pay cost. If you do, your opponent sends all of their Stock to their deck and shuffles their deck, then puts an equal number of cards from the top of their deck into Stock.
 EndCard
