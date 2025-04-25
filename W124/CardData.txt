@@ -35,7 +35,7 @@ Color Y
 Level 2
 Cost 1
 Trigger Soul
-Power 10000
+Power 5000
 Soul 1
 Trait1 Music
 Trait2 Student Council President
@@ -155,7 +155,7 @@ Auto: OnAttack
     {
       Burn 2
       MillOpponentBottom 1
-      IfTarget IsCharacter && ThatCardsLevel 2 OrLess || IsEvent
+      IfTarget IsEvent || Compare ThatCardsLevel 2 OrLess && IsCharacter
     	{
         Burn 1
     	}
@@ -232,8 +232,37 @@ Level 2
 Cost 1
 Effect:
 {
+  MultipleChoiceQuestion Choose an effect:\n1. "If you have 5 or less Level 1 or lower characters in your Waiting Room, choose up to 1 CX in your Waiting Room, add it to hand, then choose 1 of your Yellow characters, this turn, it gets +3000 power. \n2.[(2)] You may pay cost. If you do, choose 1 of your Yellow characters, this turn, it gets +1 Soul and the following ability, "AUTO - {1 Per Turn} When this attacks, you may deal 2 damage to your opponent.""|Effect 1|Effect 2
+  If Answer 0
+  {
+    TargetLocation WaitingRoom
+    NarrowTargets IsCharacter && Compare ThatCardsLevel 1 OrLess
+    SetXValue TargetCount
+    If Compare X 5 OrLess
+    {
+        SearchWaitingRoom IsClimax
+        *GiveCharacterPower(3000,Any)
+    }
+  }
+  If Answer 1
+  {
+    PayCost 2
+    {
+      TargetLocation Stage
+      ChooseCharacterFromTargets Choose a character to give the ability to.
+      GainEffect
+      {
+        Auto: OnAttack
+        {
+          *OptionalBurn(2)
+        }
+        Text Auto: This ability activates up to 1 time per turn. When this card attacks, you may deal 2 damage to your opponent.
+        TimesPerTurn 1
+      }
+    }
+  }
 }
-Text Not Functional
+Text Choose 1 of the 2 following effects and resolve it.\n"If you have 5 or less Level 1 or lower characters in your Waiting Room, choose up to 1 CX in your Waiting Room, add it to hand, then choose 1 of your Yellow characters, this turn, it gets +3000 power."\n "(2) You may pay cost. If you do, choose 1 of your Yellow characters, this turn, it gets +1 Soul and the following ability, "AUTO - {1 Per Turn} When this attacks, you may deal 2 damage to your opponent.""
 EndCard
 
 Climax: GIM/W124-030
@@ -318,8 +347,105 @@ Auto: OnReverseOpponent
 Text Auto: CxCombo When this card's battle opponent is Reversed, if you have the Door CX in your CX Area, reveal the top card of your deck, then choose 1 Level X or lower character from your Waiting Room, and add it to hand, if that card is a <Music> character, send it to Stock. X equals the Level of the revealed card.
 EndCard
 
-Character: GIM/W124-036
-Name Boom Boom Pow!, Saki Hanami
+Character: GIM/W124-037
+Name White Night! White Wish!, Ume Hanami
+Color R
+Level 3
+Cost 2
+Trigger Soul
+Power 4000
+Soul 2
+Trait1 Music
+Trait2 Sports
+Combo UmeCX
+Auto: OnPlay
+{
+  PayCost Send 1 WaitingRoom HasTrait Music && Other
+  {
+    TargetTop Clock 1
+    MoveCard Stock
+  }
+}
+Text Auto: [Send 1 of your other <Music> characters on stage to Waiting Room] When this is placed on stage from hand, you may pay cost. If you do, put the top card of your Clock into Stock.
+Auto: OnAttack
+{
+  If Climax UmeCX && LocationContainsOrLess Hand 5 Any && Compare Experience 6 OrMore
+  {
+    MultipleChoiceQuestion Which effect do you want to perform.\n1. Choose up to 3 cards in your opponent's Waiting Room, your opponent shuffles them into their deck, and this turn, this gets +1500 power.\n2. [(1)] You may pay cost. If you do, deal 2 damage to your opponent. |1|2
+    If Answer 0
+    {
+      Message Choose up to 3 cards to shuffle into your opponent's deck
+      SearchLocationForTargets OpponentWaitingRoom 0 3 Any
+      RevealTargets
+      MoveCard OpponentDeck
+      ShuffleLocation OpponentDeck
+    }
+    If Answer 1
+    {
+      PayCost 1
+      {
+        Burn 2
+      }
+    }
+  }
+}
+Text Auto: CxCombo EXPERIENCE 6 - When this attacks, if you have the Door CX in your CX Area, and you have 5 or less hand, and the sum of Levels of cards in your Level Zone is 6 or more, choose 1 of the following 2 effects and resolve it,\n"Choose up to 3 cards in your opponent's Waiting Room, your opponent shuffles them into their deck, and this turn, this gets +1500 power."\n"(1) You may pay cost. If you do, deal 2 damage to your opponent."
+EndCard
+
+Character: GIM/W124-038
+Name StockCharge Saki
+Color R
+Level 0
+Cost 0
+Power 500
+Soul 1
+Trait1 Music
+Trait2 Sports
+Cont: GiveSelf
+{
+  If MyTurn
+  {
+    GainPower 3000
+  }
+}
+Text Cont: During your turn, this gets +3000 power.
+Auto: OnPlay
+{
+  PayCost Clock
+  {
+      TargetTop Deck 1
+      MoveCard Stock
+  }
+}
+Text Auto: [Put the top card of your deck into Clock] When this is placed on stage from hand, you may pay cost. If you do, put the top card of your deck into Stock.
+EndCard
+
+Character: GIM/W124-039
+Name The Rolling Riceball, Ume Hanami
+Color R
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 Sports
+*GlobalPower(500,Music)
+Act: RestSelf
+{
+  If Compare MyLevel 1 OrMore && LocationContains WaitingRoom 1 Any
+  {
+    Question Exchange a card in your waiting room with a card in your level?
+    If Yes
+    {
+      *ExchangeCardInLevelWithWaitingRoom(Any,Any)
+    }
+  }
+}
+Text Act: [Rest this] Choose 1 card from your Level Zone and 1 <Music> character from your Waiting Room, you may swap them.
+EndCard
+
+Character: GIM/W124-043
+Name UOOOH 2/2 Rinami
 Color R
 Level 2
 Cost 2
@@ -329,7 +455,17 @@ Soul 2
 Trait1 Music
 Trait2 Cooking
 Combo RinamiCX
-Text Auto: Not Functional
+*1500Assist
+Auto: StartAttackPhase
+{
+  If Climax RinamiCX
+  {
+    PayCost SendClimax WaitingRoom
+    {
+      SearchWaitingRoom HasTrait Music
+    }
+  }
+}
 EndCard
 
 Character: GIM/W124-045
@@ -358,11 +494,56 @@ Act: Discard 1 Any SendSelf WaitingRoom
 Text Act: ACT - [Discard 1 card, Send this to Waiting Room] Choose 1 character with "Saki", "Temari" or "Kotone" in its name in your Waiting Room, add it to hand, then if you have 5 or less Memory, choose up to 1 "Saki Helmet" in your Waiting Room, send it to Memory.
 EndCard
 
+Character: GIM/W124-046
+Name DoorFilterMarker Ume
+Color R
+Level 0
+Cost 0
+Power 1000
+Soul 1
+Trait1 Music
+Trait2 Sports
+Auto: OnTriggerCheck
+{
+	IfOther IsClimax && HasTrigger Door
+	{
+    TargetLocation Stage
+    NarrowTargets HasMarker
+    TargetMarkersUnderTargets
+    SetXValue TargetCount
+    If Compare X 1 OrLess
+    {
+      Message Choose up to 1 red card to put as a marker.
+      SearchLocationForTargets WaitingRoom 0 1 Any
+      If HasTarget
+      {
+        RevealTargets
+        Marker_FaceUp
+      }
+    }
+	}
+}
+Text Auto: When you trigger a CX with a Door Trigger, if there is 1 or less cards in your Marker Areas, choose 1 Red card in your Waiting Room, you place it underneath this card face up as a Marker.
+Auto: StartOpponentAttackPhase
+{
+  PayCost 2 SendMarkers 2 WaitingRoom
+  {
+    TargetLocation OpponentStage
+    AIChoice LoseSoul 2
+    ChooseCharacterFromTargets Choose a character to give -2 soul
+    LoseSoul 2
+  }
+}
+Text Auto: [(2) Send 2 Markers underneath this card to Waiting Room] At the start of your opponent's Attack Phase, you may pay cost. If you do, choose 1 of your opponent's characters, this turn, it gets -2 Souls.
+*Act1RestSelfSearchBrainstorm(Music)
+EndCard
+
 Character: GIM/W124-050
 Name School Life, Misuzu Hataya
 Color R
 Level 1
-Cost 0
+Cost 1
+Trigger Soul
 Power 4000
 Soul 1
 Trait1 Music
@@ -457,7 +638,21 @@ Power 2500
 Soul 1
 Trait1 Music
 Trait2 Sports
-Text Auto: Not Functional
+Auto: OnPlay
+{
+  ShuffleLocation Stock
+}
+Text Auto: When this is placed on stage from hand, shuffle your Stock.
+Auto: OnAttack
+{
+  If LocationContainsOrLess Climax 0 Any
+  {
+    UntilEndOfOpponentsTurn
+    GainPower 500
+    GainSoul 1
+  }
+}
+Text Auto: When this attacks, if you do not have a CX in your CX Area, until the end of your opponent's next turn, this gets +500 power and +1 Soul.
 EndCard
 
 Character: GIM/W124-059
@@ -494,11 +689,81 @@ Name BigBody Sena Juo
 Color R
 Level 2
 Cost 1
+Trigger Soul
 Power 10500
 Soul 1
 Trait1 Music
 Trait2 Student Council President
-Text Auto: Not Functional. DO NOT USE.
+Cont: InHand
+{
+	If StageContains 4 HasTrait Quintuplets
+	{
+		LoseLevel 1
+	}
+}
+Text Cont: If you have 4 or more <Music> characters, this gets -1 Level in hand.
+*OnPlayGainPowerForEach(1000,Music)
+Auto: StartMyEncoreStep
+{
+  TargetSelf
+  MoveCard WaitingRoom
+}
+Text Auto: At the start of your Encore Step, send this to Waiting Room.
+EndCard
+
+Character: GIM/W124-061
+Name LevelChanger Saki
+Color R
+Level 3
+Cost 2
+Trigger Soul
+Power 10000
+Soul 2
+Trait1 Music
+Trait2 Student Council President
+Auto: StartMainPhase
+{
+  TargetLocation Stage
+  NarrowTargets NameEquals DoorFilterMarker Ume
+  GainEffect
+  {
+    *HexProof
+  }
+}
+InLevel
+Auto: StartOpponentDrawPhase
+{
+  TargetLocation Stage
+  NarrowTargets NameEquals DoorFilterMarker Ume
+  GainEffect
+  {
+    *HexProof
+  }
+}
+InLevel
+Text Cont:  EXPERIENCE - If this is in your Level Zone, all of your other "DoorFilterMarker Ume" gains the following ability, "CONT - This cannot be targeted by your opponent's effects."
+Auto: StartClimaxPhase
+{
+  If StageContains 1 Other && NameEquals DoorFilterMarker Ume && Compare MarkersUnderThis 2
+  {
+    PayCost 2
+    {
+      TargetLocation Stage
+      NarrowTargets NameEquals DoorFilterMarker Ume && Compare MarkersUnderThis 2
+      ChooseCharacterFromTargets
+      TargetMarkersUnderTargets
+      ChooseCardsFromTargets 2 2 Any
+      MoveCard WaitingRoom
+      Question This works?
+      If Yes
+      {
+        Burn 1
+      }
+    }
+  }
+}
+InLevel
+Text Auto: DO NOT USE THIS EFFECT. NONFUCNTIONAL
 EndCard
 
 Event: GIM/W124-063
@@ -575,7 +840,49 @@ Soul 1
 Trait1 Music
 Trait2 Genius
 Combo HiroCX
-Text Auto: Not Functional
+Auto: OnClimaxPlay
+{
+  TargetLocation Stage
+  NarrowTargets Compare ThatCardsLevel 0 OrLess
+  ChooseCharactersFromTargets 0 2 Choose up to 2 Level 0 or lower charcters to gain 1000.
+}
+Text Auto: When a CX is placed in your CX Area, choose up to 2 of your Level 0 or lower characters, this turn, they get +1000 power.
+Auto: OnClimaxPlay
+{
+  If Climax HiroCX
+  {
+    TargetLocation Stage
+    NarrowTargets Compare ThatCardsLevel 0 OrLess && Not NameEquals Combo Hiro
+    ChooseCharacterFromTargets
+    UntilEndOfOpponentsTurn
+    GainEffect
+    {
+      Cont: GiveFacing
+      {
+        GainSpecialEffect CannotSideAttack
+      }
+    }
+    UntilEndOfOpponentsTurn
+    GainEffect
+    {
+      Auto: OnAttack
+      {
+        *Scry
+      }
+    }
+    UntilEndOfOpponentsTurn
+    Auto: OnReversed
+    {
+      Question Return this card to your hand?
+      If Yes
+      {
+        TargetSelf
+        Bounce
+      }
+    }
+  }
+}
+Text Auto: CxCombo When "HiroCX" is placed in your CX Area, if you have 3 or more other <Music> characters, choose 1 of your Level 0 or lower characters other than this or Combo Hiro, until the end of your opponent's next turn, it gains the following 3 abilities, \n"CONT - The character across from this cannot side attack."\n"AUTO - When this attacks, look at the top card of your deck, and put it ontop of your deck or into your Waiting Room."\n"AUTO - When this is Reversed, you may return this to hand."
 EndCard
 
 Character: GIM/W124-079
@@ -593,7 +900,7 @@ Auto: OnReverseOpponent
   TargetBattleOpponent
   IfTarget OnStage
   {
-    MultipleChoiceQuestion Choose one of the following. \n1. Send Battle Opponent to top of deck.\n2.Send Battle Opponent to bottom of deck.\n3.Do nothing.
+    MultipleChoiceQuestion Choose one of the following. \n1. Send Battle Opponent to top of deck.\n2.Send Battle Opponent to bottom of deck.\n3.Do nothing. |1|2|3
     If Answer 0
     {
       MoveCard OpponentDeck
@@ -609,7 +916,7 @@ Auto: OnPlay
 {
   PayCost Resonate Tame-Lie-One-Step, Sumika Shiun
   {
-      SearchLocationForTargets WaitingRoom 0 1 NameEquals Resonate Tame-Lie-One-Step, Sumika Shiun
+      SearchLocationForTargets WaitingRoom 0 1 NameEquals Tame-Lie-One-Step, Sumika Shiun
       PlaceOnStage false true true false
   }
 }
@@ -719,7 +1026,23 @@ Power 1000
 Soul 1
 Trait1 Music
 Trait2 My Own Pace
-Text Auto: Not Functional
+Auto: OnPlay
+{
+  If Compare MyLevel 1 OrMore && LocationContains WaitingRoom 1 Any
+  {
+    Question Exchange a card in your waiting room with a card in your level?
+    If Yes
+    {
+      *ExchangeCardInLevelWithWaitingRoom(Any,Any)
+    }
+  }
+}
+Text Auto: When this is placed on stage from hand, choose 1 card from your Level Zone and 1 card from your Waiting Room, you may swap them.
+Act: Discard 1 Any SendSelf WaitingRoom
+{
+	SearchWaitingRoom HasTrait Music
+}
+Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 <Music> character in your Waiting Room, add it to hand.
 EndCard
 
 Character: GIM/W124-090
@@ -785,9 +1108,29 @@ Trait1 Music
 Trait2 Opera
 Auto: OnUseThisCardsBackup
 {
-
+  TargetMyCharacterInBattle
+  GainEffect
+  {
+    Auto: OnOpponentReverse
+    {
+      PeekTop Deck
+      MultipleChoiceQuestion Place this card to the waiting room or on the bottom of the deck?\n1. Place it to the waiting room \n2. Place it on the bottom of the deck \n3. Return it to the top|1|2|3
+      If Answer 0
+      {
+        MoveCard WaitingRoom
+      }
+      If Answer 1
+      {
+        MoveCardToBottom Deck
+      }
+      If Answer 2
+      {
+        EndPeek Deck
+      }
+    }
+  }
 }
-Text Auto: Not Functional
+Text Auto: When you use this card's BACKUP, choose 1 of your battling characters, this turn, it gains the following ability: "AUTO - When this card's battle opponent is Reversed, look at the top card of your deck, and put it on the top or bottom of your deck or into your Waiting Room."
 Backup 2500
 EndCard
 
