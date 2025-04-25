@@ -39,7 +39,7 @@ Power 5000
 Soul 1
 Trait1 Music
 Trait2 Student Council President
-Combo SenaCX
+Combo Go Into It As If It Were a Job
 Cont: GiveSelf
 {
   If StageContains 2 HasTrait Music && Other
@@ -62,7 +62,7 @@ Auto: OnPlay
 Text Auto: When this is placed on stage from hand, If you have 6 or less cards in your deck, you may shuffle all cards from your Waiting Room into your deck.
 Auto: StartMyEncorePhase
 {
-  If Climax SenaCX && InLocation CenterStage && StageContains 2 HasTrait Music && Other
+  If Climax Go Into It As If It Were a Job && InLocation CenterStage && StageContains 2 HasTrait Music && Other
   {
     SearchLocationForTargets Deck 0 2 IsCharacter && HasTrait Music
     RevealTargets
@@ -79,7 +79,7 @@ Auto: StartMyEncorePhase
     GainPower 1000
   }
 }
-Text Auto: CxCombo At the start of your Encore Step, if you have "SenaCX" in your CX Area, and this is in your front row, and you have 2 or more other <Music> characters, search your deck for up to 2 <Music> characters, show them to your opponent, add up to 1 to hand, send the rest to Waiting Room, and shuffle your deck afterwards, and until the end of your opponent's next turn, this gets +1000 power.
+Text Auto: CxCombo At the start of your Encore Step, if you have "Go Into It As If It Were a Job" in your CX Area, and this is in your front row, and you have 2 or more other <Music> characters, search your deck for up to 2 <Music> characters, show them to your opponent, add up to 1 to hand, send the rest to Waiting Room, and shuffle your deck afterwards, and until the end of your opponent's next turn, this gets +1000 power.
 EndCard
 
 Character: GIM/W124-004
@@ -92,7 +92,7 @@ Power 10000
 Soul 2
 Trait1 Music
 Trait2 Young Lady
-Combo ChinaCX
+Combo I Would Like to Go There as Well!
 Cont: InHand
 {
   TargetLocation WaitingRoom
@@ -106,7 +106,7 @@ Cont: InHand
 Text Cont: If you have 5 or less Level 1 or lower characters in your Waiting Room, this gets -1 Level in hand.
 Auto: OnAttack
 {
-  If Climax ChinaCX
+  If Climax I Would Like to Go There as Well!
   {
     GainPower 4000
     TargetTop Deck 1
@@ -117,7 +117,7 @@ Auto: OnAttack
     }
   }
 }
-Text Auto: CxCombo When this attacks, if you have the Choice CX in your CX Area, this turn, this gets +4000 power, then reveal the top card of your deck. If that card is a "OK, Altogether Now♪" or a Level 0 or lower character, deal 2 damage to your opponent.
+Text Auto: CxCombo When this attacks, if you have "I Would Like to Go There as Well!" in your CX Area, this turn, this gets +4000 power, then reveal the top card of your deck. If that card is a "OK, Altogether Now♪" or a Level 0 or lower character, deal 2 damage to your opponent.
 Auto: OnSentFromStageToWaitingRoom
 {
   Question Return this to hand?
@@ -128,7 +128,7 @@ Auto: OnSentFromStageToWaitingRoom
     MoveCard Stock
   }
 }
-Text Auto:
+Text Auto: - When this is sent from Stage to Waiting Room, you may return this to hand. If you do, choose up to 1 <Music> character in your Waiting Room, send it to Stock.
 EndCard
 
 Character: GIM/W124-012
@@ -141,15 +141,15 @@ Power 10000
 Soul 2
 Trait1 Music
 Trait2 Gal
-Combo SumikaCX
-Auto: OnPlay|PlacedBy Spawner Lilja
+Combo Hungry Faces, Please~!
+Auto: OnPlay|PlacedBy Hakusen, Lilja Katsuragi
 {
     *OptionalHeal
 }
-Text Auto: When this is placed on stage from hand or by the AUTO effect of "Spawner Lilja", you may heal 1.
+Text Auto: When this is placed on stage from hand or by the AUTO effect of "Hakusen, Lilja Katsuragi", you may heal 1.
 Auto: OnAttack
 {
-  If Climax SumikaCX && StageContains 2 Other && HasTrait Music
+  If Climax Hungry Faces, Please~! && StageContains 2 Other && HasTrait Music
   {
     PayCost 2 Discard 1 Any
     {
@@ -162,11 +162,11 @@ Auto: OnAttack
     }
   }
 }
-Text Auto: [(2) Discard 1 card] When this attacks, if you have "SumikaCX" in your CX Area, and you have 2 or more other <Music> characters, you may pay cost. If you do, deal 2 damage to your opponent, then send the bottom card of your opponent's deck to Waiting Room. If that card is an Event or a Level 2 or lower character, deal 1 damage to your opponent.
+Text Auto: CxCombo [(2) Discard 1 card] When this attacks, if you have "Hungry Faces, Please~!" in your CX Area, and you have 2 or more other <Music> characters, you may pay cost. If you do, deal 2 damage to your opponent, then send the bottom card of your opponent's deck to Waiting Room. If that card is an Event or a Level 2 or lower character, deal 1 damage to your opponent.
 EndCard
 
 Character: GIM/W124-016
-Name CenterRunner
+Name  Another Idol '24 Festival, Ume Hanami
 Color Y
 Level 0
 Cost 0
@@ -187,7 +187,7 @@ Text Cont: If all of your characters are <Music>, this gets +1 level and +1500 p
 EndCard
 
 Character: GIM/W124-022
-Name CX Swap Kotone
+Name Our First Encounter, Running for My Dream, Kotone Fujita
 Color Y
 Level 0
 Cost 0
@@ -206,7 +206,7 @@ Text Auto: [Discard 1 Climax with a Choice trigger icon] When this card is place
 EndCard
 
 Character: GIM/W124-023
-Name Sports Outfit Thing, Sumika Shiun (RETRANSLATE)
+Name Switch ON!, Sumiku Shiun
 Color Y
 Level 0
 Cost 0
@@ -226,7 +226,7 @@ Text Auto: When this card is placed on the stage from your hand or attacks, choo
 EndCard
 
 Event: GIM/W124-029
-Name ChinaEvent
+Name OK, Altogether Now♪
 Color Y
 Level 2
 Cost 1
@@ -241,7 +241,10 @@ Effect:
     If Compare X 5 OrLess
     {
         SearchWaitingRoom IsClimax
-        *GiveCharacterPower(3000,Any)
+        TargetLocation Stage
+        NarrowTargets IsColor Yellow
+        ChooseCharacterFromTargets Choose a character to +3000 power.
+        GainPower 3000
     }
   }
   If Answer 1
@@ -249,6 +252,7 @@ Effect:
     PayCost 2
     {
       TargetLocation Stage
+      NarrowTargets IsColor Yellow
       ChooseCharacterFromTargets Choose a character to give the ability to.
       GainEffect
       {
@@ -266,22 +270,22 @@ Text Choose 1 of the 2 following effects and resolve it.\n"If you have 5 or less
 EndCard
 
 Climax: GIM/W124-030
-Name SenaCX
+Name Go Into It As If It Were a Job
 *ChoiceClimax
 EndCard
 
 Climax: GIM/W124-031
-Name ChinaCX
+Name I Would Like to Go There as Well!
 *ChoiceClimax
 EndCard
 
 Climax: GIM/W124-033
-Name SumikaCX
+Name Hungry Faces, Please~!
 *ChoiceClimax
 EndCard
 
 Character: GIM/W124-035
-Name Mao
+Name Feel Jewel Dream, Mao Arimura
 Color R
 Level 1
 Cost 0
@@ -353,11 +357,11 @@ Color R
 Level 3
 Cost 2
 Trigger Soul
-Power 4000
+Power 10000
 Soul 2
 Trait1 Music
 Trait2 Sports
-Combo UmeCX
+Combo Hope It Doesn't Let Out Soon!
 Auto: OnPlay
 {
   PayCost Send 1 WaitingRoom HasTrait Music && Other
@@ -369,7 +373,7 @@ Auto: OnPlay
 Text Auto: [Send 1 of your other <Music> characters on stage to Waiting Room] When this is placed on stage from hand, you may pay cost. If you do, put the top card of your Clock into Stock.
 Auto: OnAttack
 {
-  If Climax UmeCX && LocationContainsOrLess Hand 5 Any && Compare Experience 6 OrMore
+  If Climax Hope It Doesn't Let Out Soon! && LocationContainsOrLess Hand 5 Any && Compare Experience 6 OrMore
   {
     MultipleChoiceQuestion Which effect do you want to perform.\n1. Choose up to 3 cards in your opponent's Waiting Room, your opponent shuffles them into their deck, and this turn, this gets +1500 power.\n2. [(1)] You may pay cost. If you do, deal 2 damage to your opponent. |1|2
     If Answer 0
@@ -379,6 +383,7 @@ Auto: OnAttack
       RevealTargets
       MoveCard OpponentDeck
       ShuffleLocation OpponentDeck
+      GainPower 1500
     }
     If Answer 1
     {
@@ -393,7 +398,7 @@ Text Auto: CxCombo EXPERIENCE 6 - When this attacks, if you have the Door CX in 
 EndCard
 
 Character: GIM/W124-038
-Name StockCharge Saki
+Name Fighting My Way, Saki Hanami
 Color R
 Level 0
 Cost 0
@@ -445,7 +450,7 @@ Text Act: [Rest this] Choose 1 card from your Level Zone and 1 <Music> character
 EndCard
 
 Character: GIM/W124-043
-Name UOOOH 2/2 Rinami
+Name Kimi to Semi Blue, Rinami Himesaki
 Color R
 Level 2
 Cost 2
@@ -454,11 +459,11 @@ Power 2000
 Soul 2
 Trait1 Music
 Trait2 Cooking
-Combo RinamiCX
+Combo In The Next Season.
 *1500Assist
 Auto: StartAttackPhase
 {
-  If Climax RinamiCX
+  If Climax In The Next Season.
   {
     PayCost SendClimax WaitingRoom
     {
@@ -466,10 +471,18 @@ Auto: StartAttackPhase
     }
   }
 }
+Text Auto: [Send "In The Next Season." from your CX Area to Waiting Room] At the start of your Attack Phase, you may pay cost. If you do, choose 1 <Music> character in your Waiting Room, add it to hand.
+Act: Discard 1 NameEquals UnknownRinami
+{
+  TargetLocation OpponentStage
+  ChooseCharacterFromTargets
+  Bounce
+}
+Text Act: - [Discard 1 "UnknownRinami"] Choose 1 of your opponent's characters, return it to hand.
 EndCard
 
 Character: GIM/W124-045
-Name Saki Helmet
+Name Our First Encounter, Running for My Dream, Saki Hanami
 Color R
 Level 0
 Cost 0
@@ -495,7 +508,7 @@ Text Act: ACT - [Discard 1 card, Send this to Waiting Room] Choose 1 character w
 EndCard
 
 Character: GIM/W124-046
-Name DoorFilterMarker Ume
+Name Grrrghh…!, Ume Hanami
 Color R
 Level 0
 Cost 0
@@ -562,7 +575,7 @@ Text Auto: [(1)] When this card's battle opponent is Reversed, you may pay cost.
 EndCard
 
 Character: GIM/W124-053
-Name ????????, China Kuramoto
+Name Our First Encounter, Running for My Dream, China Kuramoto
 Color R
 Level 0
 Cost 0
@@ -586,7 +599,7 @@ Text Auto: While this is in your Waiting Room, at the start of your First Turn, 
 Auto: OnReversed
 {
   TargetLocation WaitingRoom
-  NarrowTargets NameEquals ????????, China Kuramoto
+  NarrowTargets NameEquals Our First Encounter, Running for My Dream, China Kuramoto
   SetXValue TargetCount
   TargetBattleOpponent
   If Compare TargetCardsLevel X OrLess
@@ -598,11 +611,11 @@ Auto: OnReversed
 		}
 	}
 }
-Text Auto: When this is Reversed, if the battle opponent's Level is X or lower, you may Reverse that character. X is equal to the number of ????????, China Kuramoto in your Waiting Room.
+Text Auto: When this is Reversed, if the battle opponent's Level is X or lower, you may Reverse that character. X is equal to the number of "Our First Encounter, Running for My Dream, China Kuramoto" in your Waiting Room.
 EndCard
 
 Character: GIM/W124-055
-Name I Met You, and You Made my Dreams Come True, Rinami Himesaki (RETRANSLATE)
+Name Our First Encounter, Running for My Dream, Rinami Himesaki
 Color R
 Level 0
 Cost 0
@@ -630,7 +643,7 @@ Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 of your opponent'
 EndCard
 
 Character: GIM/W124-056
-Name SoulGain Ume
+Name School Life, Ume Hanami
 Color R
 Level 0
 Cost 0
@@ -685,7 +698,7 @@ Backup 2000
 EndCard
 
 Character: GIM/W124-060
-Name BigBody Sena Juo
+Name School Life, Sena Juo
 Color R
 Level 2
 Cost 1
@@ -696,7 +709,7 @@ Trait1 Music
 Trait2 Student Council President
 Cont: InHand
 {
-	If StageContains 4 HasTrait Quintuplets
+	If StageContains 4 HasTrait Music
 	{
 		LoseLevel 1
 	}
@@ -712,7 +725,7 @@ Text Auto: At the start of your Encore Step, send this to Waiting Room.
 EndCard
 
 Character: GIM/W124-061
-Name LevelChanger Saki
+Name Another Idol '24 Halloween, Saki Hanami
 Color R
 Level 3
 Cost 2
@@ -724,7 +737,7 @@ Trait2 Student Council President
 Auto: StartMainPhase
 {
   TargetLocation Stage
-  NarrowTargets NameEquals DoorFilterMarker Ume
+  NarrowTargets NameEquals Grrrghh…!, Ume Hanami
   GainEffect
   {
     *HexProof
@@ -734,22 +747,22 @@ InLevel
 Auto: StartOpponentDrawPhase
 {
   TargetLocation Stage
-  NarrowTargets NameEquals DoorFilterMarker Ume
+  NarrowTargets NameEquals Grrrghh…!, Ume Hanami
   GainEffect
   {
     *HexProof
   }
 }
 InLevel
-Text Cont:  EXPERIENCE - If this is in your Level Zone, all of your other "DoorFilterMarker Ume" gains the following ability, "CONT - This cannot be targeted by your opponent's effects."
+Text Cont:  EXPERIENCE - If this is in your Level Zone, all of your other "Grrrghh…!, Ume Hanami" gains the following ability, "CONT - This cannot be targeted by your opponent's effects."
 Auto: StartClimaxPhase
 {
-  If StageContains 1 Other && NameEquals DoorFilterMarker Ume && Compare MarkersUnderThis 2
+  If StageContains 1 Other && NameEquals Grrrghh…!, Ume Hanami && Compare MarkersUnderThis 2
   {
     PayCost 2
     {
       TargetLocation Stage
-      NarrowTargets NameEquals DoorFilterMarker Ume && Compare MarkersUnderThis 2
+      NarrowTargets NameEquals Grrrghh…!, Ume Hanami && Compare MarkersUnderThis 2
       ChooseCharacterFromTargets
       TargetMarkersUnderTargets
       ChooseCardsFromTargets 2 2 Any
@@ -767,7 +780,7 @@ Text Auto: DO NOT USE THIS EFFECT. NONFUCNTIONAL
 EndCard
 
 Event: GIM/W124-063
-Name To the Main Stage of Dreams!
+Name This, Was Our Three Years
 Color R
 Level 3
 Cost 1
@@ -792,12 +805,12 @@ Name Leave it to your big sister!
 EndCard
 
 Climax: GIM/W124-065
-Name UmeCX
+Name Hope It Doesn't Let Out Soon!
 *DoorClimax
 EndCard
 
 Climax: GIM/W124-066
-Name RinamiCX
+Name In The Next Season.
 *StandbyClimax
 EndCard
 
@@ -836,7 +849,7 @@ Text Auto: CxCombo When this attacks, if you have the "What are you doing?" in y
 EndCard
 
 Character: GIM/W124-074
-Name Combo Hiro
+Name Koukei, Hiro Shinosawa
 Color B
 Level 0
 Cost 0
@@ -844,7 +857,7 @@ Power 2000
 Soul 1
 Trait1 Music
 Trait2 Genius
-Combo HiroCX
+Combo We're, Doing What We Can
 Auto: OnClimaxPlay
 {
   TargetLocation Stage
@@ -854,10 +867,10 @@ Auto: OnClimaxPlay
 Text Auto: When a CX is placed in your CX Area, choose up to 2 of your Level 0 or lower characters, this turn, they get +1000 power.
 Auto: OnClimaxPlay
 {
-  If Climax HiroCX
+  If Climax We're, Doing What We Can
   {
     TargetLocation Stage
-    NarrowTargets Compare ThatCardsLevel 0 OrLess && Not NameEquals Combo Hiro
+    NarrowTargets Compare ThatCardsLevel 0 OrLess && Not NameEquals Koukei, Hiro Shinosawa
     ChooseCharacterFromTargets
     UntilEndOfOpponentsTurn
     GainEffect
@@ -887,11 +900,11 @@ Auto: OnClimaxPlay
     }
   }
 }
-Text Auto: CxCombo When "HiroCX" is placed in your CX Area, if you have 3 or more other <Music> characters, choose 1 of your Level 0 or lower characters other than this or Combo Hiro, until the end of your opponent's next turn, it gains the following 3 abilities, \n"CONT - The character across from this cannot side attack."\n"AUTO - When this attacks, look at the top card of your deck, and put it ontop of your deck or into your Waiting Room."\n"AUTO - When this is Reversed, you may return this to hand."
+Text Auto: CxCombo When "We're, Doing What We Can" is placed in your CX Area, if you have 3 or more other <Music> characters, choose 1 of your Level 0 or lower characters other than this or "Koukei, Hiro Shinosawa", until the end of your opponent's next turn, it gains the following 3 abilities, \n"CONT - The character across from this cannot side attack."\n"AUTO - When this attacks, look at the top card of your deck, and put it ontop of your deck or into your Waiting Room."\n"AUTO - When this is Reversed, you may return this to hand."
 EndCard
 
 Character: GIM/W124-079
-Name Spawner Lilja
+Name Hakusen, Lilja Katsuragi
 Color B
 Level 3
 Cost 2
@@ -929,7 +942,7 @@ Text Auto: RESONATE [Reveal "Tame-Lie-One-Step, Sumika Shiun" from your hand] Wh
 EndCard
 
 Character: GIM/W124-082
-Name Swimsuit, Lilja Katsuragi (RETRANSLATE)
+Name Another Idol '24 Summer, Lilja Katsuragi
 Color B
 Level 0
 Cost 0
@@ -956,7 +969,7 @@ Text Auto: RESONATE [Reveal "Resonate Tame-Lie-One-Step, Sumika Shiun" from your
 EndCard
 
 Character: GIM/W124-084
-Name OnAtttackResonate Lilja
+Name Our First Encounter, Running for My Dream, Lilja Katsuragi
 Color B
 Level 1
 Cost 0
@@ -981,7 +994,7 @@ Text Auto: RESONATE [(1) Reveal "Tame-Lie-One-Step, Sumika Shiun" from your hand
 EndCard
 
 Character: GIM/W124-088
-Name Memory Temari
+Name Our First Encounter, Running for My Dream, Temari Tsukimura
 Color B
 Level 0
 Cost 0
@@ -1023,7 +1036,7 @@ Text Auto: [(1)] During your opponent's turn, when this card becomes reversed in
 EndCard
 
 Character: GIM/W124-089
-Name Helmet Misuzu
+Name A Classmate Who Can't Be Left Alone, Misuzu Hataya
 Color B
 Level 0
 Cost 0
@@ -1051,7 +1064,7 @@ Text Act: [Discard 1 card, Send this to Waiting Room] Choose 1 <Music> character
 EndCard
 
 Character: GIM/W124-090
-Name Healer, Hiro
+Name Our First Encounter, Running for My Dream, Hiro Shinosawa
 Color B
 Level 0
 Cost 0
@@ -1064,7 +1077,7 @@ Auto: StartMainPhase
 	If Compare MyLevel 1 OrMore
   {
     Mill 1
-    IfTarget Compare ThatCardsLevel 0 OrLess && IsCharacter || NameEquals UnknownEvent
+    IfTarget Compare ThatCardsLevel 0 OrLess && IsCharacter || NameEquals OK, Altogether Now♪
     {
       TargetSelf
       MoveCardToBottom Deck
@@ -1072,11 +1085,11 @@ Auto: StartMainPhase
   }
 }
 Alarm
-Text Auto: ALARM If this is on top of your Clock, if you are Level 1 or higher, at the start of your Main Phase, mill 1. If that card is a {Unknown Event} or a Level 0 or lower character, send this to the bottom of your deck.
+Text Auto: ALARM If this is on top of your Clock, if you are Level 1 or higher, at the start of your Main Phase, mill 1. If that card is a "OK, Altogether Now♪" or a Level 0 or lower character, send this to the bottom of your deck.
 EndCard
 
 Character: GIM/W124-093
-Name Brainstorm Sumika
+Name Our First Encounter, Running for My Dream, Sumika Shiun
 Color B
 Level 1
 Cost 0
@@ -1102,7 +1115,7 @@ Text Act: [(1) Rest 2 of your characters] Flip over the top 4 cards of your deck
 EndCard
 
 Character: GIM/W124-094
-Name Backup Mao
+Name Our First Encounter, Running for My Dream, Mao Arimura
 Color B
 Level 2
 Cost 1
@@ -1145,12 +1158,12 @@ Name What are you doing?
 EndCard
 
 Climax: GIM/W124-099
-Name HiroCX
+Name We're, Doing What We Can
 *GateClimax
 EndCard
 
 Character: GIM/W124-P04
-Name StockShuffle Saki
+Name Another Idol '24 Christmas, Saki Hanami
 Color B
 Level 2
 Cost 1
