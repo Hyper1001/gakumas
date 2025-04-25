@@ -679,7 +679,7 @@ Trait1 Music
 Trait2 Student Council President
 Auto: OnUseThisCardsBackup
 {
-  If Compare Experience 6 OrMore
+  If Compare Experience 2 OrMore
   {
     SearchWaitingRoomForTarget HasTrait Music
     Question Put this on top of your stock? (If no, character is sent to bottom of stock)
@@ -863,6 +863,7 @@ Auto: OnClimaxPlay
   TargetLocation Stage
   NarrowTargets Compare ThatCardsLevel 0 OrLess
   ChooseCharactersFromTargets 0 2 Choose up to 2 Level 0 or lower charcters to gain 1000.
+  GainPower 1000
 }
 Text Auto: When a CX is placed in your CX Area, choose up to 2 of your Level 0 or lower characters, this turn, they get +1000 power.
 Auto: OnClimaxPlay
@@ -879,6 +880,7 @@ Auto: OnClimaxPlay
       {
         GainSpecialEffect CannotSideAttack
       }
+      Text Cont: The character across from this cannot side attack.
     }
     UntilEndOfOpponentsTurn
     GainEffect
@@ -887,16 +889,21 @@ Auto: OnClimaxPlay
       {
         *Scry
       }
+      Text Auto: When this attacks, look at the top card of your deck, and put it on top of your deck or into your Waiting Room.
     }
     UntilEndOfOpponentsTurn
-    Auto: OnReversed
+    GainEffect
     {
-      Question Return this card to your hand?
-      If Yes
+      Auto: OnReversed
       {
-        TargetSelf
-        Bounce
+        Question Return this card to your hand?
+        If Yes
+        {
+          TargetSelf
+          Bounce
+        }
       }
+      Text Auto: When this is Reversed, you may return this to hand.
     }
   }
 }
@@ -954,7 +961,7 @@ Auto: OnPlay
 {
   PayCost Discard 1 HasTrait Music
   {
-    SearchDeck NameEquals Tame-Lie-One-Step, Sumika Shiun || UnknownSumika
+    SearchDeck NameEquals Tame-Lie-One-Step, Sumika Shiun || NameEquals UnknownSumika
   }
 }
 Text Auto: [Discard 1 <Music> character] When this is placed on stage from hand, you may pay cost. If you do, search your deck for up to 1 "Tame-Lie-One-Step, Sumika Shiun" or {Unknown Sumika}, show it to your opponent, add it to hand, and shuffle your deck afterwards.
@@ -1105,7 +1112,7 @@ Auto: OnAttack
 Text Auto: When this attacks, if you have another <Music> character, look at the top card of your deck, and put it on top of your deck or into your Waiting Room, and this turn, this gets +2000 power.
 Act: 1 Rest 2 Any
 {
-	Brainstorm 5
+	Brainstorm 4
 	PerClimax
 	{
 		SearchWaitingRoom IsCharacter && HasTrait Music
