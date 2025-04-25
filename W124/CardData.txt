@@ -791,6 +791,11 @@ Name Leave it to your big sister!
 *DoorClimax
 EndCard
 
+Climax: GIM/W124-065
+Name UmeCX
+*DoorClimax
+EndCard
+
 Climax: GIM/W124-066
 Name RinamiCX
 *StandbyClimax
