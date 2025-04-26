@@ -500,11 +500,11 @@ Act: Discard 1 Any SendSelf WaitingRoom
 	SearchWaitingRoom IsCharacter && NameContains Saki|Temari|Kotone
   If LocationContainsOrLess Memory 5 Any
   {
-    SearchLocationForTargets WaitingRoom 0 1 NameEquals Saki Helmet
+    SearchLocationForTargets WaitingRoom 0 1 NameEquals Our First Encounter, Running for My Dream, Saki Hanami
     MoveCard Memory
   }
 }
-Text Act: ACT - [Discard 1 card, Send this to Waiting Room] Choose 1 character with "Saki", "Temari" or "Kotone" in its name in your Waiting Room, add it to hand, then if you have 5 or less Memory, choose up to 1 "Saki Helmet" in your Waiting Room, send it to Memory.
+Text Act: ACT - [Discard 1 card, Send this to Waiting Room] Choose 1 character with "Saki", "Temari" or "Kotone" in its name in your Waiting Room, add it to hand, then if you have 5 or less Memory, choose up to 1 "Our First Encounter, Running for My Dream, Saki Hanami" in your Waiting Room, send it to Memory.
 EndCard
 
 Character: GIM/W124-046
@@ -527,7 +527,7 @@ Auto: OnTriggerCheck
     If Compare X 1 OrLess
     {
       Message Choose up to 1 red card to put as a marker.
-      SearchLocationForTargets WaitingRoom 0 1 Any
+      SearchLocationForTargets WaitingRoom 0 1 IsColor Red
       If HasTarget
       {
         RevealTargets
@@ -754,24 +754,23 @@ Auto: StartOpponentDrawPhase
   }
 }
 InLevel
-Text Cont:  EXPERIENCE - If this is in your Level Zone, all of your other "Grrrghh…!, Ume Hanami" gains the following ability, "CONT - This cannot be targeted by your opponent's effects."
+Text Cont: EXPERIENCE - If this is in your Level Zone, all of your other "Grrrghh…!, Ume Hanami" gains the following ability, "CONT - This cannot be targeted by your opponent's effects."
 Auto: StartClimaxPhase
 {
-  If StageContains 1 Other && NameEquals Grrrghh…!, Ume Hanami && Compare MarkersUnderThis 2
+  TargetLocation Stage
+  NarrowTargets HasMarker
+  TargetMarkersUnderTargets
+  SetXValue TargetCount
+  If Compare X 2 OrMore
   {
     PayCost 2
     {
       TargetLocation Stage
-      NarrowTargets NameEquals Grrrghh…!, Ume Hanami && Compare MarkersUnderThis 2
-      ChooseCharacterFromTargets
+      NarrowTargets NameEquals Grrrghh…!, Ume Hanami && HasMarker
+      ChooseCardsFromTargets
       TargetMarkersUnderTargets
       ChooseCardsFromTargets 2 2 Any
       MoveCard WaitingRoom
-      Question This works?
-      If Yes
-      {
-        Burn 1
-      }
     }
   }
 }
